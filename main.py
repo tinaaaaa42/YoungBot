@@ -9,6 +9,7 @@ from wcferry import Wcf
 
 import random
 from utils import all_emoji
+from utils.all_memes import Memer
 from plugins import azure
 
 logging.basicConfig(level='DEBUG', format="%(asctime)s %(message)s")
@@ -20,7 +21,7 @@ def process_msg(wcf: Wcf):
     while wcf.is_receiving_msg():
         try:
             msg = wcf.get_msg()
-            if msg.is_text:
+            if msg.is_text and msg.type == 1:
                 if str(msg.content).endswith("。"):
                     wcf.send_text("对不起呜呜呜不要生气[委屈]", msg.sender)
                     continue
@@ -39,6 +40,13 @@ def process_msg(wcf: Wcf):
                 else:
                     sleep(random.uniform(2, 3))
                     wcf.send_text(azure.azure(str(msg.content)), msg.sender)
+            else:
+                meme_path = Memer().get_one_meme()
+                if meme_path.endswith(".gif"):
+                    wcf.send_emotion(meme_path, msg.sender)
+                else:
+                    wcf.send_image(meme_path, msg.sender)
+                    
         except Exception as e:
             continue
 
@@ -59,6 +67,7 @@ def main():
 
     # 允许接收消息
     wcf.enable_receiving_msg()
+    memer = Memer()
     Thread(target=process_msg, name="GetMessage", args=(wcf,), daemon=True).start()
 
     # wcf.disable_recv_msg() # 当需要停止接收消息时调用

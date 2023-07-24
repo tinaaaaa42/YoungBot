@@ -2,3 +2,4 @@ logs
 *.lock
 utils/__pycache__
 plugins/__pycache__
+resources/memes/
