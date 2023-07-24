@@ -9,6 +9,7 @@ from wcferry import Wcf
 
 import random
 from utils import all_emoji
+from plugins import azure
 
 logging.basicConfig(level='DEBUG', format="%(asctime)s %(message)s")
 LOG = logging.getLogger("Demo")
@@ -23,18 +24,21 @@ def process_msg(wcf: Wcf):
                 if str(msg.content).endswith("。"):
                     wcf.send_text("对不起呜呜呜不要生气[委屈]", msg.sender)
                     continue
-                if msg.content == "测试文字":
+                elif msg.content == "测试文字":
                     wcf.send_text("收到！", msg.sender)
-                if msg.content == "测试所有自带emoji":
+                elif msg.content == "测试所有自带emoji":
                     for emoji in all_emoji.wechat_emoji:
                         sleep(random.randint(1, 3))
                         wcf.send_text(emoji, msg.sender)
-                if msg.content == "测试自带emoji":
+                elif msg.content == "测试自带emoji":
                     wcf.send_text(all_emoji.get_one_wechat_emoji(), msg.sender)
-                if msg.content == "测试其它emoji" or msg.content == "测试其他emoji":
+                elif msg.content == "测试其它emoji" or msg.content == "测试其他emoji":
                     wcf.send_text(all_emoji.get_one_emoji(), msg.sender)
-                if msg.content == "测试图片":
+                elif msg.content == "测试图片":
                     wcf.send_image("D:/dev/YoungBot/test.jpg", msg.sender)
+                else:
+                    sleep(random.uniform(2, 3))
+                    wcf.send_text(azure.azure(str(msg.content)), msg.sender)
         except Exception as e:
             continue
 
